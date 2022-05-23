@@ -34,10 +34,10 @@ $ npm run start:prod
 
 NestJs | TypeScript | Swagger
 
-## Stay in touch
+## Contato
 
 - Autor - [Lucas Marques](https://www.linkedin.com/in/mlucasdev/)
 
-## License
+## Licença
 
 Nest is [MIT licensed](LICENSE).
