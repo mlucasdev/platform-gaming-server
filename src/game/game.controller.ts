@@ -7,10 +7,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateGameDto } from './dto/create-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { GameService } from './game.service';
 
+@ApiTags('game')
 @Controller('game')
 export class GameController {
   constructor(private gameService: GameService) {}
