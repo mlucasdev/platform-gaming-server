@@ -32,7 +32,7 @@ $ npm run start:prod
 
 ## Como Testar a Aplicação
 
-Após ter realizado os procedimentos a cima, cole o link abaixo em seu navegador. <b>http://localhost:3333/api/</b>
+Após ter realizado os procedimentos a cima, cole o este link em seu navegador. <b>http://localhost:3333/api/</b>
 
 ## Stacks Usadas
 
