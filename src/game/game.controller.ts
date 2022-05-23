@@ -43,3 +43,4 @@ export class GameController {
     return this.gameService.delete(id);
   }
 }
+
