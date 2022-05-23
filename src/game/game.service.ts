@@ -12,6 +12,6 @@ export class GameService {
   }
 
   findAll() {
-    return 'Buscar todos os jogosa.';
+    return this.games;
   }
 }
