@@ -1,6 +1,6 @@
 ## Descrição
 
-Projeto criado no curso de Back-End da Blue EdTech.<br>
+Projeto criado no Módulo 04 do curso de Back-End da Blue EdTech.<br>
 O foco deste projeto foi desenvolver uma api que tivesse todas as operações do CRUD de uma plataforma de Jogos online.
 
 ## Como Clonar o Repositório
