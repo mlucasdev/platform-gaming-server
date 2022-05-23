@@ -15,6 +15,7 @@ export class CreateGameDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsUrl()
   coverImageUrl: string;
 
   @IsNotEmpty()
