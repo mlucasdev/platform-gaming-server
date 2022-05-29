@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Games {
+  id String @id @default(uuid())
+
+  title              String @unique
+  coverImageUrl      String @map("cover_image_url")
+  description        String
+  year               Int
+  imdbScore          Float  @map("imdb_score")
+  trailerYouTubeUrl  String @map("trailer_youtube_url")
+  gameplayYouTubeUrl String @map("gameplay_youtube_url")
+
+  createdAt DateTime @default(now()) @map("create_at")
+  updateAt  DateTime @updatedAt @map("update_at")
+
+  @@map("games")
+}
+
+model Genders {
+  id   String @id @default(uuid())
+  name String @unique
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("update_at")
+
+  @@map("genders")
+}
+
+model Users {
+  id String @id @default(uuid())
+
+  name     String
+  email    String
+  password String
+  cpf      Int
+  isAdmin  Boolean @map("is_admin")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("update_at")
+
+  @@map("users")
+}
+
+model Profiles {
+  id String @id @default(uuid())
+
+  title    String
+  imageURL String @map("image_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("update_at")
+
+  @@map("profiles")
+}
