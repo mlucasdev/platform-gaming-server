@@ -42,16 +42,16 @@ export class GameController {
     return this.gameService.findOne(id);
   }
 
-  // @Patch(':id')
-  // @ApiOperation({
-  //   summary: 'Editar um jogo pelo id.',
-  // })
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateGameDto: UpdateGameDto,
-  // ): Promise<Game> {
-  //   return this.gameService.update(id, updateGameDto);
-  // }
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Editar um jogo pelo id.',
+  })
+  update(
+    @Param('id') id: string,
+    @Body() updateGameDto: UpdateGameDto,
+  ): Promise<Game> {
+    return this.gameService.update(id, updateGameDto);
+  }
 
   // @Delete(':id')
   // @ApiOperation({

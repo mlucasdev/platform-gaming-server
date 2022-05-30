@@ -21,13 +21,13 @@ export class GameService {
     return this.prisma.games.findUnique({ where: { id } });
   }
 
-  // update(id: string, dto: UpdateGameDto): Promise<Game> {
-  //   const data: Partial<Game> = { ...dto };
-  //   return this.prisma.games.update({
-  //     where: { id },
-  //     data,
-  //   });
-  // }
+  update(id: string, dto: UpdateGameDto): Promise<Game> {
+    const data: Partial<Game> = { ...dto };
+    return this.prisma.games.update({
+      where: { id },
+      data,
+    });
+  }
 
   // async delete(id: string) {
   //   await this.prisma.games.delete({ where: { id } });
