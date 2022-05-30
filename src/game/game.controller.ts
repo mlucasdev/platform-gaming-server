@@ -36,7 +36,7 @@ export class GameController {
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Buscar um jogo pelo id.',
+    summary: 'Buscar um jogo pelo ID.',
   })
   findOne(@Param('id') id: string): Promise<Game> {
     return this.gameService.findOne(id);
@@ -44,7 +44,7 @@ export class GameController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Editar um jogo pelo id.',
+    summary: 'Editar um jogo pelo ID.',
   })
   update(
     @Param('id') id: string,
@@ -55,9 +55,9 @@ export class GameController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Deletar um jogo pelo id.',
+    summary: 'Deletar um jogo pelo ID.',
   })
   delete(@Param('id') id: string) {
-    this.gameService.delete(id);
+    return this.gameService.delete(id);
   }
 }
