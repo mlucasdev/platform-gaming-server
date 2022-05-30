@@ -52,7 +52,6 @@ export class CreateGameDto {
   @IsNumber({
     maxDecimalPlaces: 1,
   })
-  @IsPositive()
   @ApiProperty({
     description: 'Nota do IMDb para o jogo.',
     example: 5,
