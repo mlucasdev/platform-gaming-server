@@ -20,8 +20,12 @@ export class GameService {
     return this.prisma.games.create({ data }).catch(this.handleError);
   }
 
-  findAll(): Promise<Game[]> {
-    return this.prisma.games.findMany({});
+  async findAll(): Promise<Game[]> {
+    const games = await this.prisma.games.findMany();
+    if (games.length == 0) {
+      throw new NotFoundException(`Nada foi encontrado.`);
+    }
+    return games;
   }
 
   findOne(id: string): Promise<Game> {
