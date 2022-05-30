@@ -49,7 +49,9 @@ export class CreateGameDto {
   year: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsNumber({
+    maxDecimalPlaces: 1,
+  })
   @IsPositive()
   @ApiProperty({
     description: 'Nota do IMDb para o jogo.',
@@ -64,7 +66,7 @@ export class CreateGameDto {
     description: 'Url do trailer do jogo.',
     example: 'https://www.youtube.com/watch?v=vLj-27T-SEQ',
   })
-  trailerYoutubeUrl: string;
+  trailerYouTubeUrl: string;
 
   @IsNotEmpty()
   @IsString()
@@ -73,5 +75,5 @@ export class CreateGameDto {
     description: 'Url de uma game play do jogo.',
     example: 'https://www.youtube.com/watch?v=OXCULaCzB0E',
   })
-  gameplayYoutubeUrl: string;
+  gameplayYouTubeUrl: string;
 }
