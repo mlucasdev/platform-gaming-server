@@ -6,8 +6,6 @@ import { Game } from './entities/game.entity';
 
 @Injectable()
 export class GameService {
-  private readonly games: Game[] = [];
-
   constructor(private readonly prisma: PrismaService) {}
 
   create(dto: CreateGameDto): Promise<Game> {
@@ -19,28 +17,19 @@ export class GameService {
     return this.prisma.games.findMany({});
   }
 
-  // findOne(id: number): CreateGameDto {
-  //   const game: Game = this.games.find((element) => element.id === id);
-  //   return game;
+  findOne(id: string): Promise<Game> {
+    return this.prisma.games.findUnique({ where: { id } });
+  }
+
+  // update(id: string, dto: UpdateGameDto): Promise<Game> {
+  //   const data: Partial<Game> = { ...dto };
+  //   return this.prisma.games.update({
+  //     where: { id },
+  //     data,
+  //   });
   // }
 
-  // update(id: number, updateGameDto: UpdateGameDto): CreateGameDto {
-  //   let game: Game = this.games.find((element) => element.id === id);
-  //   game = { id: id, ...updateGameDto };
-  //   for (let i = 0; i < this.games.length; i++) {
-  //     if (this.games[i].id === id) {
-  //       return (this.games[i] = game);
-  //     }
-  //   }
-  // }
-
-  // delete(id: number): object {
-  //   for (let i = 0; i < this.games.length; i++) {
-  //     if (id === this.games[i].id) {
-  //       const game = this.games[i];
-  //       this.games.splice(1, i);
-  //       return { message: `${game.title} deletado com sucesso!` };
-  //     }
-  //   }
+  // async delete(id: string) {
+  //   await this.prisma.games.delete({ where: { id } });
   // }
 }

@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -34,22 +34,22 @@ export class GameController {
     return this.gameService.findAll();
   }
 
-  // @Get(':id')
-  // @ApiOperation({
-  //   summary: 'Buscar um jogo pelo id.',
-  // })
-  // findOne(@Param('id') id: number): CreateGameDto {
-  //   return this.gameService.findOne(id);
-  // }
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Buscar um jogo pelo id.',
+  })
+  findOne(@Param('id') id: string): Promise<Game> {
+    return this.gameService.findOne(id);
+  }
 
-  // @Put(':id')
+  // @Patch(':id')
   // @ApiOperation({
   //   summary: 'Editar um jogo pelo id.',
   // })
   // update(
-  //   @Param('id') id: number,
+  //   @Param('id') id: string,
   //   @Body() updateGameDto: UpdateGameDto,
-  // ): CreateGameDto {
+  // ): Promise<Game> {
   //   return this.gameService.update(id, updateGameDto);
   // }
 
@@ -57,7 +57,7 @@ export class GameController {
   // @ApiOperation({
   //   summary: 'Deletar um jogo pelo id.',
   // })
-  // delete(@Param('id') id: number): object {
-  //   return this.gameService.delete(id);
+  // delete(@Param('id') id: string) {
+  //   this.gameService.delete(id);
   // }
 }
