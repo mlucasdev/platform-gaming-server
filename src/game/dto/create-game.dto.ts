@@ -5,8 +5,7 @@ import {
   IsPositive,
   IsString,
   IsUrl,
-  MaxLength,
-  MinLength,
+  Length,
 } from 'class-validator';
 
 export class CreateGameDto {
@@ -30,8 +29,7 @@ export class CreateGameDto {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(10)
-  @MaxLength(1000)
+  @Length(10, 1000)
   @ApiProperty({
     description: 'Descrição para o jogo.',
     example:
