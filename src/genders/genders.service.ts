@@ -17,12 +17,13 @@ export class GendersService {
     return this.prisma.genders.findMany();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} gender`;
+  findOne(id: string): Promise<Gender> {
+    return this.prisma.genders.findUnique({ where: { id } });
   }
 
-  update(id: string, dto: UpdateGenderDto) {
-    return `This action updates a #${id} gender`;
+  update(id: string, dto: UpdateGenderDto): Promise<Gender> {
+    const data: Partial<Gender> = { ...dto };
+    return this.prisma.genders.update({ where: { id }, data });
   }
 
   remove(id: string) {
