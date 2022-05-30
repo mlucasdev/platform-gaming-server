@@ -29,7 +29,7 @@ export class GameService {
     });
   }
 
-  // async delete(id: string) {
-  //   await this.prisma.games.delete({ where: { id } });
-  // }
+  async delete(id: string) {
+    await this.prisma.games.delete({ where: { id } });
+  }
 }

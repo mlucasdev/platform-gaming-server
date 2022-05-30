@@ -53,11 +53,11 @@ export class GameController {
     return this.gameService.update(id, updateGameDto);
   }
 
-  // @Delete(':id')
-  // @ApiOperation({
-  //   summary: 'Deletar um jogo pelo id.',
-  // })
-  // delete(@Param('id') id: string) {
-  //   this.gameService.delete(id);
-  // }
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Deletar um jogo pelo id.',
+  })
+  delete(@Param('id') id: string) {
+    this.gameService.delete(id);
+  }
 }
