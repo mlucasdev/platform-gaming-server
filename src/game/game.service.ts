@@ -15,9 +15,9 @@ export class GameService {
     return this.prisma.games.create({ data });
   }
 
-  // findAll(): Promise<Game[]> {
-  //   return this.prisma.games.findMany({});
-  // }
+  findAll(): Promise<Game[]> {
+    return this.prisma.games.findMany({});
+  }
 
   // findOne(id: number): CreateGameDto {
   //   const game: Game = this.games.find((element) => element.id === id);

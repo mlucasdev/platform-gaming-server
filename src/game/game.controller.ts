@@ -26,13 +26,13 @@ export class GameController {
     return this.gameService.create(dto);
   }
 
-  // @Get()
-  // @ApiOperation({
-  //   summary: 'Buscar todos os jogos.',
-  // })
-  // findAll(): Promise<Game[]> {
-  //   return this.gameService.findAll();
-  // }
+  @Get()
+  @ApiOperation({
+    summary: 'Buscar todos os jogos.',
+  })
+  findAll(): Promise<Game[]> {
+    return this.gameService.findAll();
+  }
 
   // @Get(':id')
   // @ApiOperation({
