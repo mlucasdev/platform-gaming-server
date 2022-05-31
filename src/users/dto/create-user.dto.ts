@@ -35,6 +35,7 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
+  @Length(11,11)
   @ApiProperty({
     description: 'CPF do usuário.',
     example: '12312312399',
