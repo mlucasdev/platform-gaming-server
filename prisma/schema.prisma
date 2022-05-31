@@ -43,7 +43,7 @@ model Users {
   name     String
   email    String
   password String
-  cpf      Int
+  cpf      String
   isAdmin  Boolean @map("is_admin")
 
   createdAt DateTime @default(now()) @map("created_at")
