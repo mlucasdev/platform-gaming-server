@@ -8,5 +8,5 @@ export class Game {
   trailerYouTubeUrl: string;
   gameplayYouTubeUrl: string;
   createdAt?: Date;
-  updateAt?: Date;
+  updatedAt?: Date;
 }

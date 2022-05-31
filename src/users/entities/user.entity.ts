@@ -6,5 +6,5 @@ export class User {
   cpf: string;
   isAdmin: boolean;
   createdA?: Date;
-  updateAt?: Date;
+  updatedAt?: Date;
 }

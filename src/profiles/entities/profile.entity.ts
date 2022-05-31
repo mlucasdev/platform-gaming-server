@@ -3,5 +3,5 @@ export class Profile {
   title: string;
   imageURL: string;
   createdAt?: Date;
-  updateAt?: Date;
+  updatedAt?: Date;
 }
