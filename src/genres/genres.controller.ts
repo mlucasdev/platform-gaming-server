@@ -7,39 +7,39 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { GendersService } from './genres.service';
+import { GenreService } from './genres.service';
 import { CreateGenderDto } from './dto/create-genre.dto';
 import { UpdateGenderDto } from './dto/update-genre.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Gender } from './entities/genre.entity';
+import { Genre } from './entities/genre.entity';
 
 @ApiTags('genre')
-@Controller('genders')
+@Controller('genres')
 export class GendersController {
-  constructor(private readonly gendersService: GendersService) {}
+  constructor(private readonly genreService: GenreService) {}
 
   @Post()
   @ApiOperation({
     summary: 'Criar um novo Gênero.',
   })
-  create(@Body() dto: CreateGenderDto): Promise<Gender> {
-    return this.gendersService.create(dto);
+  create(@Body() dto: CreateGenderDto): Promise<Genre> {
+    return this.genreService.create(dto);
   }
 
   @Get()
   @ApiOperation({
     summary: 'Buscar todos os Gêneros.',
   })
-  findAll(): Promise<Gender[]> {
-    return this.gendersService.findAll();
+  findAll(): Promise<Genre[]> {
+    return this.genreService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({
     summary: 'Buscar um Gênero pelo ID.',
   })
-  findOne(@Param('id') id: string): Promise<Gender> {
-    return this.gendersService.findOne(id);
+  findOne(@Param('id') id: string): Promise<Genre> {
+    return this.genreService.findOne(id);
   }
 
   @Patch(':id')
@@ -49,8 +49,8 @@ export class GendersController {
   update(
     @Param('id') id: string,
     @Body() dto: UpdateGenderDto,
-  ): Promise<Gender> {
-    return this.gendersService.update(id, dto);
+  ): Promise<Genre> {
+    return this.genreService.update(id, dto);
   }
 
   @Delete(':id')
@@ -58,6 +58,6 @@ export class GendersController {
     summary: 'Deletar um Gênero pelo ID.',
   })
   delete(@Param('id') id: string) {
-    return this.gendersService.delete(id);
+    return this.genreService.delete(id);
   }
 }

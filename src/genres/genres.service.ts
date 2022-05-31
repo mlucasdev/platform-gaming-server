@@ -7,45 +7,45 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateGenderDto } from './dto/create-genre.dto';
 import { UpdateGenderDto } from './dto/update-genre.dto';
-import { Gender } from './entities/genre.entity';
+import { Genre } from './entities/genre.entity';
 
 @Injectable()
-export class GendersService {
+export class GenreService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateGenderDto): Promise<Gender> {
-    const data: Gender = { ...dto };
-    return this.prisma.genders.create({ data }).catch(this.handleError);
+  create(dto: CreateGenderDto): Promise<Genre> {
+    const data: Genre = { ...dto };
+    return this.prisma.genres.create({ data }).catch(this.handleError);
   }
 
-  async findAll(): Promise<Gender[]> {
-    const genders = await this.prisma.genders.findMany();
+  async findAll(): Promise<Genre[]> {
+    const genders = await this.prisma.genres.findMany();
     if (genders.length == 0) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
     return genders;
   }
 
-  findOne(id: string): Promise<Gender> {
+  findOne(id: string): Promise<Genre> {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateGenderDto): Promise<Gender> {
+  async update(id: string, dto: UpdateGenderDto): Promise<Genre> {
     await this.findById(id);
-    const data: Partial<Gender> = { ...dto };
-    return this.prisma.genders
+    const data: Partial<Genre> = { ...dto };
+    return this.prisma.genres
       .update({ where: { id }, data })
       .catch(this.handleError);
   }
 
   async delete(id: string) {
     await this.findById(id);
-    await this.prisma.genders.delete({ where: { id } });
+    await this.prisma.genres.delete({ where: { id } });
     throw new HttpException('', 204);
   }
 
-  async findById(id: string): Promise<Gender> {
-    const record = await this.prisma.genders.findUnique({ where: { id } });
+  async findById(id: string): Promise<Genre> {
+    const record = await this.prisma.genres.findUnique({ where: { id } });
     if (!record) {
       throw new NotFoundException(`Registro com o Id '${id}' não encontrado.`);
     }
