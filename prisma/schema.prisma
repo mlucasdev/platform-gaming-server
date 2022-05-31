@@ -22,7 +22,7 @@ model Games {
   gameplayYouTubeUrl String @map("gameplay_youtube_url")
 
   createdAt DateTime @default(now()) @map("create_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt  DateTime @updatedAt @map("update_at")
 
   @@map("games")
 }
@@ -32,7 +32,7 @@ model Genders {
   name String @unique
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt  DateTime @updatedAt @map("update_at")
 
   @@map("genders")
 }
@@ -41,13 +41,13 @@ model Users {
   id String @id @default(uuid())
 
   name     String
-  email    String
+  email    String @unique
   password String
-  cpf      String
+  cpf      String @unique
   isAdmin  Boolean @map("is_admin")
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt  DateTime @updatedAt @map("update_at")
 
   @@map("users")
 }
@@ -59,7 +59,7 @@ model Profiles {
   imageURL String @map("image_url")
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt  DateTime @updatedAt @map("update_at")
+  updatedAt  DateTime @updatedAt @map("update_at")
 
   @@map("profiles")
 }
