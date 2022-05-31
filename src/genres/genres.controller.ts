@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { GenreService } from './genres.service';
-import { CreateGenderDto } from './dto/create-genre.dto';
-import { UpdateGenderDto } from './dto/update-genre.dto';
+import { CreateGenreDto } from './dto/create-genre.dto';
+import { UpdateGenreDto } from './dto/update-genre.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Genre } from './entities/genre.entity';
 
@@ -22,7 +22,7 @@ export class GendersController {
   @ApiOperation({
     summary: 'Criar um novo Gênero.',
   })
-  create(@Body() dto: CreateGenderDto): Promise<Genre> {
+  create(@Body() dto: CreateGenreDto): Promise<Genre> {
     return this.genreService.create(dto);
   }
 
@@ -48,7 +48,7 @@ export class GendersController {
   })
   update(
     @Param('id') id: string,
-    @Body() dto: UpdateGenderDto,
+    @Body() dto: UpdateGenreDto,
   ): Promise<Genre> {
     return this.genreService.update(id, dto);
   }

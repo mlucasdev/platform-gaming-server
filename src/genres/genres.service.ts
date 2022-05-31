@@ -5,15 +5,15 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateGenderDto } from './dto/create-genre.dto';
-import { UpdateGenderDto } from './dto/update-genre.dto';
+import { CreateGenreDto } from './dto/create-genre.dto';
+import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Genre } from './entities/genre.entity';
 
 @Injectable()
 export class GenreService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateGenderDto): Promise<Genre> {
+  create(dto: CreateGenreDto): Promise<Genre> {
     const data: Genre = { ...dto };
     return this.prisma.genres.create({ data }).catch(this.handleError);
   }
@@ -30,7 +30,7 @@ export class GenreService {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateGenderDto): Promise<Genre> {
+  async update(id: string, dto: UpdateGenreDto): Promise<Genre> {
     await this.findById(id);
     const data: Partial<Genre> = { ...dto };
     return this.prisma.genres
