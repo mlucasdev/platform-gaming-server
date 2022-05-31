@@ -36,7 +36,7 @@ Após ter realizado os procedimentos a cima, cole o este link em seu navegador. 
 
 ## Stacks Usadas
 
-NestJs | TypeScript | Swagger
+NestJs | TypeScript | JavaScript | PostgreSQL | Prisma | NodeJs | Swagger
 
 ## Contato
 
