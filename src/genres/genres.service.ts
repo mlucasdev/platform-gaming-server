@@ -5,9 +5,9 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateGenderDto } from './dto/create-gender.dto';
-import { UpdateGenderDto } from './dto/update-gender.dto';
-import { Gender } from './entities/gender.entity';
+import { CreateGenderDto } from './dto/create-genre.dto';
+import { UpdateGenderDto } from './dto/update-genre.dto';
+import { Gender } from './entities/genre.entity';
 
 @Injectable()
 export class GendersService {

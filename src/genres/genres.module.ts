@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { GendersService } from './genders.service';
-import { GendersController } from './genders.controller';
+import { GendersService } from './genres.service';
+import { GendersController } from './genres.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({

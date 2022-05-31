@@ -27,14 +27,14 @@ model Games {
   @@map("games")
 }
 
-model Genders {
+model Genres {
   id   String @id @default(uuid())
   name String @unique
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("update_at")
 
-  @@map("genders")
+  @@map("genres")
 }
 
 model Users {

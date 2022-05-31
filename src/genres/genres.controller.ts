@@ -7,11 +7,11 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { GendersService } from './genders.service';
-import { CreateGenderDto } from './dto/create-gender.dto';
-import { UpdateGenderDto } from './dto/update-gender.dto';
+import { GendersService } from './genres.service';
+import { CreateGenderDto } from './dto/create-genre.dto';
+import { UpdateGenderDto } from './dto/update-genre.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Gender } from './entities/gender.entity';
+import { Gender } from './entities/genre.entity';
 
 @ApiTags('gender')
 @Controller('genders')
