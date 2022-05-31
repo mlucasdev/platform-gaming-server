@@ -36,11 +36,11 @@ export class ProfilesService {
       .catch(this.handleError);
   }
 
-  // async delete(id: string) {
-  //   await this.findById(id);
-  //   await this.prisma.profiles.delete({ where: { id } });
-  //   throw new HttpException('', 204);
-  // }
+  async delete(id: string) {
+    await this.findById(id);
+    await this.prisma.profiles.delete({ where: { id } });
+    throw new HttpException('', 204);
+  }
 
   async findById(id: string): Promise<Profile> {
     const record = await this.prisma.profiles.findUnique({ where: { id } });

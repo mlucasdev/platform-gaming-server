@@ -45,11 +45,11 @@ export class ProfilesController {
     return this.profilesService.update(id, dto);
   }
 
-  // @Delete(':id')
-  // @ApiOperation({
-  //   summary: 'Deletar um jogo pelo ID.',
-  // })
-  // delete(@Param('id') id: string): Promise<void> {
-  //   return this.profilesService.delete(id);
-  // }
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Deletar um jogo pelo ID.',
+  })
+  delete(@Param('id') id: string): Promise<void> {
+    return this.profilesService.delete(id);
+  }
 }
