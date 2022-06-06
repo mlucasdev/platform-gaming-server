@@ -1,10 +1,6 @@
-import {
-  HttpException,
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -15,7 +11,7 @@ export class UsersService {
 
   create(dto: CreateUserDto): Promise<User> {
     const data: User = { ...dto };
-    return this.prisma.users.create({ data }).catch(this.handleError);
+    return this.prisma.users.create({ data }).catch(handleError);
   }
 
   async findAll(): Promise<User[]> {
@@ -33,9 +29,7 @@ export class UsersService {
   async update(id: string, dto: UpdateUserDto): Promise<User> {
     await this.findById(id);
     const data: Partial<User> = { ...dto };
-    return this.prisma.users
-      .update({ where: { id }, data })
-      .catch(this.handleError);
+    return this.prisma.users.update({ where: { id }, data }).catch(handleError);
   }
 
   async delete(id: string) {
@@ -50,14 +44,5 @@ export class UsersService {
       throw new NotFoundException(`Registro com o Id '${id}' não encontrado.`);
     }
     return record;
-  }
-
-  handleError(error: Error): undefined {
-    const errorLines = error.message?.split('\n');
-    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
-
-    throw new UnprocessableEntityException(
-      lastErrorLine || 'Algum erro ocorreu ao executar a operação.',
-    );
   }
 }
