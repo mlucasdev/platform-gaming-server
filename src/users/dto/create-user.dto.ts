@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsString,
   Length,
+  Matches,
   MinLength,
 } from 'class-validator';
 
@@ -13,7 +14,7 @@ export class CreateUserDto {
   @IsString()
   @ApiProperty({
     description: 'Nome do Usuário.',
-    example: 'Nayane Sousa',
+    example: 'Neymar Junior',
   })
   name: string;
 
@@ -22,30 +23,35 @@ export class CreateUserDto {
   @Length(5, 50)
   @ApiProperty({
     description: 'Email do usuário.',
-    example: 'nayane@gmail.com',
+    example: 'neymarjunior@gmail.com',
   })
   email: string;
 
   @IsString()
   @MinLength(8)
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message: 'Senha muito fraca',
+  })
   @ApiProperty({
     description: 'Senha do usuário.',
-    example: 'abcd1234',
+    example: 'Abcd@1234',
   })
   password: string;
 
   @IsString()
-  @Length(11,11)
+  @ApiProperty({
+    description: 'A confirmação da senha deve ser igual a senha.',
+    example: 'Abcd@1234',
+  })
+  confirmPassword: string;
+
+  @IsString()
+  @Length(11, 11)
   @ApiProperty({
     description: 'CPF do usuário.',
     example: '12312312399',
   })
   cpf: string;
 
-  @IsBoolean()
-  @ApiProperty({
-    description: 'Usuário Admin ou não.',
-    example: false,
-  })
   isAdmin: boolean;
 }
