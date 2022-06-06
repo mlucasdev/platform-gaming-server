@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -14,7 +22,7 @@ export class ProfilesController {
   @ApiOperation({
     summary: 'Criar um novo jogo.',
   })
-  create(@Body() dto: CreateProfileDto): Promise<Profile> {
+  create(@Body() dto: CreateProfileDto) {
     return this.profilesService.create(dto);
   }
 
@@ -38,10 +46,7 @@ export class ProfilesController {
   @ApiOperation({
     summary: 'Editar um jogo pelo ID.',
   })
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateProfileDto,
-  ): Promise<Profile> {
+  update(@Param('id') id: string, @Body() dto: UpdateProfileDto) {
     return this.profilesService.update(id, dto);
   }
 

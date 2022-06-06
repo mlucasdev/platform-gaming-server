@@ -1,4 +1,5 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
 import { CreateProfileDto } from './dto/create-profile.dto';
@@ -9,9 +10,35 @@ import { Profile } from './entities/profile.entity';
 export class ProfilesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateProfileDto): Promise<Profile> {
-    const data: Profile = { ...dto };
-    return this.prisma.profiles.create({ data }).catch(handleError);
+  profileSelect = {
+    id: true,
+    title: true,
+    imageURL: true,
+    user: {
+      select: {
+        id: true,
+        name: true,
+      },
+    },
+  };
+
+  create(dto: CreateProfileDto) {
+    const data: Prisma.ProfilesCreateInput = {
+      title: dto.title,
+      imageURL: dto.imageURL,
+      user: {
+        connect: {
+          id: dto.userId,
+        },
+      },
+    };
+
+    return this.prisma.profiles
+      .create({
+        data,
+        select: this.profileSelect,
+      })
+      .catch(handleError);
   }
 
   async findAll(): Promise<Profile[]> {
@@ -26,13 +53,22 @@ export class ProfilesService {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateProfileDto): Promise<Profile> {
+  async update(id: string, dto: UpdateProfileDto) {
     await this.findById(id);
-    const data: Partial<Profile> = { ...dto };
+    const data: Partial<Prisma.ProfilesCreateInput> = {
+      title: dto.title,
+      imageURL: dto.imageURL,
+      user: {
+        connect: {
+          id: dto.userId,
+        },
+      },
+    };
     return this.prisma.profiles
       .update({
         where: { id },
         data,
+        select: this.profileSelect,
       })
       .catch(handleError);
   }
