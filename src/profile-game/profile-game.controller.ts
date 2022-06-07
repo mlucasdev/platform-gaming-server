@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { CreateProfileGameDto } from './dto/create-profile-game.dto';
 import { ProfileGameService } from './profile-game.service';
@@ -13,5 +13,13 @@ export class ProfileGameController {
   })
   create(@Body() dto: CreateProfileGameDto) {
     return this.profileGameService.create(dto);
+  }
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Listar todos os jogos do perfil pelo ID',
+  })
+  findOne(@Param('id') id: string) {
+    return this.profileGameService.findOne(id);
   }
 }
