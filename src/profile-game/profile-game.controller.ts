@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateProfileGameDto } from './dto/create-profile-game.dto';
 import { ProfileGameService } from './profile-game.service';
 
+@ApiTags('profile-game')
 @Controller('profile-game')
 export class ProfileGameController {
   constructor(private readonly profileGameService: ProfileGameService) {}
