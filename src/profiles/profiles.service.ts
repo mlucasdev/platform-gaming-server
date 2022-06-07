@@ -82,7 +82,15 @@ export class ProfilesService {
   async findById(id: string) {
     const record = await this.prisma.profiles.findUnique({
       where: { id },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        imageURL: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
         games: {
           select: {
             game: {
@@ -90,6 +98,20 @@ export class ProfilesService {
                 id: true,
                 title: true,
                 coverImageUrl: true,
+                description: true,
+                year: true,
+                imdbScore: true,
+                trailerYouTubeUrl: true,
+                gameplayYouTubeUrl: true,
+                genres: {
+                  select: {
+                    genre: {
+                      select: {
+                        name: true,
+                      },
+                    },
+                  },
+                },
               },
             },
           },
