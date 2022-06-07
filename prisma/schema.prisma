@@ -102,5 +102,5 @@ model ProfileGame {
   favorite Boolean
 
   @@unique([gameId, profileId])
-  @@map("game_to_profile")
+  @@map("profile_to_game")
 }
