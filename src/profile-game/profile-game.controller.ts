@@ -16,11 +16,11 @@ export class ProfileGameController {
     return this.profileGameService.create(dto);
   }
 
-  @Get(':id')
+  @Get('homepage/favorites/:id')
   @ApiOperation({
-    summary: 'Listar todos os jogos do perfil pelo ID',
+    summary: 'Buscar todos os jogos favoritos do Perfil pelo ID',
   })
-  findOne(@Param('id') id: string) {
-    return this.profileGameService.findOne(id);
+  findAllFavorites(@Param('id') id: string) {
+    return this.profileGameService.findAllFavorites(id);
   }
 }

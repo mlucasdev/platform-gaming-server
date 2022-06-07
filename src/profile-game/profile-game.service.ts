@@ -8,33 +8,7 @@ import { CreateProfileGameDto } from './dto/create-profile-game.dto';
 export class ProfileGameService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findById(id: string) {
-    const record = this.prisma.profiles.findUnique({
-      where: { id },
-      select: {
-        title: true,
-        games: {
-          select: {
-            game: {
-              select: {
-                id: true,
-                title: true,
-                coverImageUrl: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!record) {
-      throw new NotFoundException(`Perfil com ID ${record} não encontrado`);
-    }
-
-    return record;
-  }
-
-  create(dto: CreateProfileGameDto) {
+  async create(dto: CreateProfileGameDto) {
     const data: Prisma.ProfileGameCreateInput = {
       game: {
         connect: {
@@ -49,7 +23,7 @@ export class ProfileGameService {
       favorite: dto.favorite,
     };
 
-    return this.prisma.profileGame
+    return await this.prisma.profileGame
       .create({
         data,
         select: {
@@ -81,7 +55,23 @@ export class ProfileGameService {
       .catch(handleError);
   }
 
-  findOne(id: string) {
-    return this.findById(id);
+  async findAllFavorites(id: string) {
+    const allGamesProfile = await this.prisma.profiles.findUnique({
+      where: { id },
+      select: {
+        games: {
+          select: {
+            favorite: true,
+            game: true,
+          },
+        },
+      },
+    });
+
+    const favoritesGames = allGamesProfile.games.filter(
+      (element) => element.favorite == true,
+    );
+
+    return favoritesGames;
   }
 }
