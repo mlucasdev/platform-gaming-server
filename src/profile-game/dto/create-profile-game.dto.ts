@@ -5,16 +5,16 @@ export class CreateProfileGameDto {
   @IsUUID()
   @ApiProperty({
     description: 'ID do jogo que terá relação com o perfil',
-    example: '2e1f48a4-ba15-44cf-b091-f0df1d57b3a7',
+    example: '929e3f1c-646d-4366-823a-709d12c53e84',
   })
-  gameId: string;
+  profileId: string;
 
   @IsUUID()
   @ApiProperty({
     description: 'ID do jogo que terá relação com o perfil',
-    example: '929e3f1c-646d-4366-823a-709d12c53e84',
+    example: '2e1f48a4-ba15-44cf-b091-f0df1d57b3a7',
   })
-  profileId: string;
+  gameId: string;
 
   @IsBoolean()
   @ApiProperty({
