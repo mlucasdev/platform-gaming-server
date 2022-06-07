@@ -49,7 +49,7 @@ export class ProfilesService {
     return profiles;
   }
 
-  findOne(id: string): Promise<Profile> {
+  findOne(id: string) {
     return this.findById(id);
   }
 
@@ -79,11 +79,28 @@ export class ProfilesService {
     throw new HttpException('', 204);
   }
 
-  async findById(id: string): Promise<Profile> {
-    const record = await this.prisma.profiles.findUnique({ where: { id } });
+  async findById(id: string) {
+    const record = await this.prisma.profiles.findUnique({
+      where: { id },
+      include: {
+        games: {
+          select: {
+            game: {
+              select: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
     if (!record) {
-      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
+      throw new NotFoundException(`Perfil com ID ${record} não encontrado`);
     }
+
     return record;
   }
 }
