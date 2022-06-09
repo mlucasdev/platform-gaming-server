@@ -14,8 +14,24 @@ export class GenreService {
     return this.prisma.genres.create({ data }).catch(handleError);
   }
 
-  async findAll(): Promise<Genre[]> {
-    const genders = await this.prisma.genres.findMany();
+  async findAll() {
+    const genders = await this.prisma.genres.findMany({
+      select: {
+        id: true,
+        name: true,
+        games: {
+          select: {
+            game: {
+              select: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    });
     if (genders.length == 0) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
@@ -41,7 +57,18 @@ export class GenreService {
   }
 
   async findById(id: string): Promise<Genre> {
-    const record = await this.prisma.genres.findUnique({ where: { id } });
+    const record = await this.prisma.genres.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        games: {
+          select: {
+            game: true,
+          },
+        },
+      },
+    });
     if (!record) {
       throw new NotFoundException(`Registro com o Id '${id}' não encontrado.`);
     }
