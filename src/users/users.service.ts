@@ -15,10 +15,22 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string) {
     const record = await this.prisma.users.findUnique({
       where: { id },
-      select: this.userSelect,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: false,
+        cpf: true,
+        isAdmin: false,
+        profile: {
+          select: {
+            title: true,
+          },
+        },
+      },
     });
     if (!record) {
       throw new NotFoundException(`Registro com o Id '${id}' não encontrado.`);
@@ -34,6 +46,7 @@ export class UsersService {
     cpf: true,
     isAdmin: false,
   };
+  
 
   confirmPassword(password, confirmPassword) {
     if (password !== confirmPassword) {
@@ -41,7 +54,7 @@ export class UsersService {
     }
   }
 
-  async create(dto: CreateUserDto): Promise<User> {
+  async create(dto: CreateUserDto) {
     this.confirmPassword(dto.password, dto.confirmPassword);
 
     delete dto.confirmPassword;
@@ -57,19 +70,33 @@ export class UsersService {
       .catch(handleError);
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.prisma.users.findMany({ select: this.userSelect });
+  async findAll() {
+    const users = await this.prisma.users.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        password: false,
+        cpf: true,
+        isAdmin: false,
+        profile: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
     if (users.length == 0) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
     return users;
   }
 
-  findOne(id: string): Promise<User> {
+  findOne(id: string) {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateUserDto): Promise<User> {
+  async update(id: string, dto: UpdateUserDto) {
     if (dto.password) {
       this.confirmPassword(dto.password, dto.confirmPassword);
     }
@@ -82,7 +109,23 @@ export class UsersService {
       data.password = await bcrypt.hash(dto.password, 10);
     }
     return this.prisma.users
-      .update({ where: { id }, data, select: this.userSelect })
+      .update({
+        where: { id },
+        data,
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          password: false,
+          cpf: true,
+          isAdmin: false,
+          profile: {
+            select: {
+              title: true,
+            },
+          },
+        },
+      })
       .catch(handleError);
   }
 
