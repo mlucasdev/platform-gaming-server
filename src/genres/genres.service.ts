@@ -1,10 +1,6 @@
-import {
-  HttpException,
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Genre } from './entities/genre.entity';
@@ -15,11 +11,27 @@ export class GenreService {
 
   create(dto: CreateGenreDto): Promise<Genre> {
     const data: Genre = { ...dto };
-    return this.prisma.genres.create({ data }).catch(this.handleError);
+    return this.prisma.genres.create({ data }).catch(handleError);
   }
 
-  async findAll(): Promise<Genre[]> {
-    const genders = await this.prisma.genres.findMany();
+  async findAll() {
+    const genders = await this.prisma.genres.findMany({
+      select: {
+        id: true,
+        name: true,
+        games: {
+          select: {
+            game: {
+              select: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    });
     if (genders.length == 0) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
@@ -35,7 +47,7 @@ export class GenreService {
     const data: Partial<Genre> = { ...dto };
     return this.prisma.genres
       .update({ where: { id }, data })
-      .catch(this.handleError);
+      .catch(handleError);
   }
 
   async delete(id: string) {
@@ -45,19 +57,21 @@ export class GenreService {
   }
 
   async findById(id: string): Promise<Genre> {
-    const record = await this.prisma.genres.findUnique({ where: { id } });
+    const record = await this.prisma.genres.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        games: {
+          select: {
+            game: true,
+          },
+        },
+      },
+    });
     if (!record) {
       throw new NotFoundException(`Registro com o Id '${id}' não encontrado.`);
     }
     return record;
-  }
-
-  handleError(error: Error): undefined {
-    const errorLines = error.message?.split('\n');
-    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
-
-    throw new UnprocessableEntityException(
-      lastErrorLine || 'Algum erro ocorreu ao executar a operação.',
-    );
   }
 }

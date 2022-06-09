@@ -1,5 +1,7 @@
-import { HttpException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { handleError } from 'src/utils/handle-error.util';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { Profile } from './entities/profile.entity';
@@ -8,32 +10,69 @@ import { Profile } from './entities/profile.entity';
 export class ProfilesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateProfileDto): Promise<Profile> {
-    const data: Profile = { ...dto };
-    return this.prisma.profiles.create({ data }).catch(this.handleError);
+  private profileSelect = {
+    id: true,
+    title: true,
+    imageURL: true,
+    user: {
+      select: {
+        id: true,
+        name: true,
+      },
+    },
+  };
+
+  create(dto: CreateProfileDto) {
+    const data: Prisma.ProfilesCreateInput = {
+      title: dto.title,
+      imageURL: dto.imageURL,
+      user: {
+        connect: {
+          id: dto.userId,
+        },
+      },
+    };
+
+    return this.prisma.profiles
+      .create({
+        data,
+        select: this.profileSelect,
+      })
+      .catch(handleError);
   }
 
-  async findAll(): Promise<Profile[]> {
-    const profiles = await this.prisma.profiles.findMany();
+  async findAll() {
+    const profiles = await this.prisma.profiles.findMany({
+      select: this.profileSelect,
+    });
     if (profiles.length == 0) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
     return profiles;
   }
 
-  findOne(id: string): Promise<Profile> {
+  findOne(id: string) {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateProfileDto): Promise<Profile> {
+  async update(id: string, dto: UpdateProfileDto) {
     await this.findById(id);
-    const data: Partial<Profile> = { ...dto };
+    const data: Partial<Prisma.ProfilesCreateInput> = {
+      title: dto.title,
+      imageURL: dto.imageURL,
+      user: {
+        connect: {
+          id: dto.userId,
+        },
+      },
+    };
     return this.prisma.profiles
       .update({
         where: { id },
         data,
+        select: this.profileSelect,
       })
-      .catch(this.handleError);
+      .catch(handleError);
   }
 
   async delete(id: string) {
@@ -42,20 +81,50 @@ export class ProfilesService {
     throw new HttpException('', 204);
   }
 
-  async findById(id: string): Promise<Profile> {
-    const record = await this.prisma.profiles.findUnique({ where: { id } });
+  async findById(id: string) {
+    const record = await this.prisma.profiles.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        title: true,
+        imageURL: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        games: {
+          select: {
+            game: {
+              select: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+                description: true,
+                year: true,
+                imdbScore: true,
+                trailerYouTubeUrl: true,
+                gameplayYouTubeUrl: true,
+                genres: {
+                  select: {
+                    genre: {
+                      select: {
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
     if (!record) {
-      throw new NotFoundException(`Registro com o ID '${id}' não encontrado.`);
+      throw new NotFoundException(`Perfil com ID ${record} não encontrado`);
     }
+
     return record;
-  }
-
-  handleError(error: Error): undefined {
-    const errorLines = error.message?.split('\n');
-    const lastErrorLine = errorLines[errorLines.length - 1]?.trim();
-
-    throw new UnprocessableEntityException(
-      lastErrorLine || 'Algum erro ocorreu ao executar a operação.',
-    );
   }
 }

@@ -1,3 +1,5 @@
+import { Genre } from 'src/genres/entities/genre.entity';
+
 export class Game {
   id?: string;
   title: string;
@@ -7,6 +9,7 @@ export class Game {
   imdbScore: number;
   trailerYouTubeUrl: string;
   gameplayYouTubeUrl: string;
+  genres?: Genre[];
   createdAt?: Date;
   updatedAt?: Date;
 }

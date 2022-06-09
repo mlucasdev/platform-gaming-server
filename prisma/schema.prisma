@@ -21,8 +21,12 @@ model Games {
   trailerYouTubeUrl  String @map("trailer_youtube_url")
   gameplayYouTubeUrl String @map("gameplay_youtube_url")
 
+  genres GameGenre[]
+
+  profiles ProfileGame[]
+
   createdAt DateTime @default(now()) @map("create_at")
-  updatedAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("update_at")
 
   @@map("games")
 }
@@ -32,7 +36,9 @@ model Genres {
   name String @unique
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("update_at")
+
+  games GameGenre[]
 
   @@map("genres")
 }
@@ -41,13 +47,15 @@ model Users {
   id String @id @default(uuid())
 
   name     String
-  email    String @unique
+  email    String  @unique
   password String
-  cpf      String @unique
+  cpf      String  @unique
   isAdmin  Boolean @map("is_admin")
 
+  profile Profiles[]
+
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("update_at")
 
   @@map("users")
 }
@@ -58,8 +66,41 @@ model Profiles {
   title    String
   imageURL String @map("image_url")
 
+  user   Users  @relation(fields: [userId], references: [id])
+  userId String
+
+  games ProfileGame[]
+
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("update_at")
+  updatedAt DateTime @updatedAt @map("update_at")
 
   @@map("profiles")
+}
+
+model GameGenre {
+  id String @id @default(uuid())
+
+  game   Games  @relation(fields: [gameId], references: [id])
+  gameId String @map("game_id")
+
+  genre   Genres @relation(fields: [genreId], references: [id])
+  genreId String @map("genre_id")
+
+  @@unique([gameId, genreId])
+  @@map("game_to_genre")
+}
+
+model ProfileGame {
+  id String @id @default(uuid())
+
+  game   Games  @relation(fields: [gameId], references: [id])
+  gameId String @map("game_id")
+
+  profile   Profiles @relation(fields: [profileId], references: [id])
+  profileId String   @map("profile_id")
+
+  favorite Boolean
+
+  @@unique([gameId, profileId])
+  @@map("profile_to_game")
 }

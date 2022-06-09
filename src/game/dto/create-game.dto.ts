@@ -5,6 +5,7 @@ import {
   IsPositive,
   IsString,
   IsUrl,
+  IsUUID,
   Length,
 } from 'class-validator';
 
@@ -73,4 +74,12 @@ export class CreateGameDto {
     example: 'https://www.youtube.com/watch?v=OXCULaCzB0E',
   })
   gameplayYouTubeUrl: string;
+
+  @IsUUID(undefined, { each: true })
+  @ApiProperty({
+    description: 'Lista com os IDs dos gêneros do jogo.',
+    example:
+      '["4306080b-e8be-46de-a591-192dce96ff10", "c4446e0a-93a8-4af2-8c63-606833e367a7"]',
+  })
+  genres: string[];
 }

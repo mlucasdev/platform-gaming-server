@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -12,42 +20,39 @@ export class ProfilesController {
 
   @Post()
   @ApiOperation({
-    summary: 'Criar um novo jogo.',
+    summary: 'Criar um novo Perfil.',
   })
-  create(@Body() dto: CreateProfileDto): Promise<Profile> {
+  create(@Body() dto: CreateProfileDto) {
     return this.profilesService.create(dto);
   }
 
   @Get()
   @ApiOperation({
-    summary: 'Buscar todos os jogos.',
+    summary: 'Buscar todos os Perfis.',
   })
-  findAll(): Promise<Profile[]> {
+  findAll() {
     return this.profilesService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Buscar um jogo pelo ID.',
+    summary: 'Buscar um Perfil pelo ID.',
   })
-  findOne(@Param('id') id: string): Promise<Profile> {
+  findOne(@Param('id') id: string) {
     return this.profilesService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Editar um jogo pelo ID.',
+    summary: 'Editar um Perfil pelo ID.',
   })
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateProfileDto,
-  ): Promise<Profile> {
+  update(@Param('id') id: string, @Body() dto: UpdateProfileDto) {
     return this.profilesService.update(id, dto);
   }
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Deletar um jogo pelo ID.',
+    summary: 'Deletar um Perfil pelo ID.',
   })
   delete(@Param('id') id: string): Promise<void> {
     return this.profilesService.delete(id);

@@ -14,7 +14,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Criar um novo Usuário.',
   })
-  create(@Body() dto: CreateUserDto): Promise<User> {
+  create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
   }
 
@@ -22,7 +22,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Buscar todos os Usuários.',
   })
-  findAll(): Promise<User[]> {
+  findAll() {
     return this.usersService.findAll();
   }
 
@@ -30,7 +30,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Buscar um Usuário pelo ID.',
   })
-  findOne(@Param('id') id: string): Promise<User> {
+  findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
 
@@ -41,7 +41,7 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
-  ): Promise<User> {
+  ) {
     return this.usersService.update(id, dto);
   }
 
