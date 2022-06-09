@@ -10,7 +10,7 @@ import { Profile } from './entities/profile.entity';
 export class ProfilesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  profileSelect = {
+  private profileSelect = {
     id: true,
     title: true,
     imageURL: true,
@@ -41,8 +41,10 @@ export class ProfilesService {
       .catch(handleError);
   }
 
-  async findAll(): Promise<Profile[]> {
-    const profiles = await this.prisma.profiles.findMany();
+  async findAll() {
+    const profiles = await this.prisma.profiles.findMany({
+      select: this.profileSelect,
+    });
     if (profiles.length == 0) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }

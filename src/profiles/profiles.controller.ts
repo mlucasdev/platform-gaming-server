@@ -30,7 +30,7 @@ export class ProfilesController {
   @ApiOperation({
     summary: 'Buscar todos os Perfis.',
   })
-  findAll(): Promise<Profile[]> {
+  findAll() {
     return this.profilesService.findAll();
   }
 
