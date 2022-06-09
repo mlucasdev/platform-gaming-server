@@ -55,23 +55,52 @@ export class ProfileGameService {
       .catch(handleError);
   }
 
-  async findAllFavorites(id: string) {
+  async homePage(id: string) {
     const allGamesProfile = await this.prisma.profiles.findUnique({
       where: { id },
       select: {
         games: {
           select: {
             favorite: true,
-            game: true,
+            game: {
+              include: {
+                genres: {
+                  select: {
+                    genre: {
+                      select: {
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const genres = await this.prisma.genres.findMany({
+      select: {
+        name: true,
+        games: {
+          select: {
+            game: {
+              select: {
+                id: true,
+                title: true,
+                coverImageUrl: true,
+              },
+            },
           },
         },
       },
     });
 
     const favoritesGames = allGamesProfile.games.filter(
-      (element) => element.favorite == true,
+      (game) => game.favorite == true,
     );
 
-    return favoritesGames;
+    return [{ favoritesGames }, { allGamesProfile }, { genres }];
   }
 }
