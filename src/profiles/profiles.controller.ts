@@ -47,23 +47,23 @@ export class ProfilesController {
     return this.profilesService.findOne(profileId, user.id);
   }
 
-  // @Patch(':profileId')
-  // @ApiOperation({
-  //   summary: 'Editar um Perfil pelo ID.',
-  // })
-  // update(
-  //   @Param('profileId') profileId: string,
-  //   @LoggedUser() user: User,
-  //   @Body() dto: UpdateProfileDto,
-  // ) {
-  //   return this.profilesService.update(profileId, user.id, dto);
-  // }
+  @Patch(':profileId')
+  @ApiOperation({
+    summary: 'Editar um Perfil pelo ID.',
+  })
+  update(
+    @Param('profileId') profileId: string,
+    @LoggedUser() user: User,
+    @Body() dto: UpdateProfileDto,
+  ) {
+    return this.profilesService.update(profileId, user.id, dto);
+  }
 
-  // @Delete(':id')
-  // @ApiOperation({
-  //   summary: 'Deletar um Perfil pelo ID.',
-  // })
-  // delete(@Param('id') id: string): Promise<void> {
-  //   return this.profilesService.delete(id);
-  // }
+  @Delete(':profileId')
+  @ApiOperation({
+    summary: 'Deletar um Perfil pelo ID.',
+  })
+  delete(@Param('profileId') profileId: string, @LoggedUser() user: User): Promise<void> {
+    return this.profilesService.delete(profileId, user.id);
+  }
 }

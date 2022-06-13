@@ -68,49 +68,45 @@ export class ProfilesService {
     return this.findById(profileId, userId);
   }
 
-  // async update(profileId: string, userId: string, dto: UpdateProfileDto) {
-  //   await this.findById(profileId);
-  //   const data: Partial<Prisma.ProfilesCreateInput> = {
-  //     title: dto.title,
-  //     imageURL: dto.imageURL,
-  //     user: {
-  //       connect: {
-  //         id: userId,
-  //       },
-  //     },
-  //   };
-  //   return this.prisma.profiles
-  //     .update({
-  //       where: { id: profileId },
-  //       data,
-  //       select: this.profileSelect,
-  //     })
-  //     .catch(handleError);
-  // }
+  async update(profileId: string, userId: string, dto: UpdateProfileDto) {
+    await this.findById(profileId, userId);
+    const data: Partial<Prisma.ProfilesCreateInput> = {
+      title: dto.title,
+      imageURL: dto.imageURL,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    };
+    return this.prisma.profiles
+      .update({
+        where: { id: profileId },
+        data,
+        select: this.profileSelect,
+      })
+      .catch(handleError);
+  }
 
-  // async delete(id: string) {
-  //   await this.findById(id);
-  //   await this.prisma.profiles.delete({ where: { id } });
-  //   throw new HttpException('', 204);
-  // }
+  async delete(id: string, userId: string) {
+    await this.findById(id, userId);
+    await this.prisma.profiles.delete({ where: { id } });
+    throw new HttpException('', 204);
+  }
 
   async findById(profileId: string, userId: string) {
-    const user = await this.prisma.users.findUnique({
+    const profileUser = await this.prisma.users.findUnique({
       where: { id: userId },
       select: {
         profile: {
-          select: {
-            id: true,
+          where: {
+            id: profileId,
           },
         },
       },
     });
 
-    const profileID = user.profile.filter(
-      (element) => element.id === profileId,
-    );
-
-    if (profileID.length === 0) {
+    if (profileUser.profile.length === 0) {
       throw new UnauthorizedException(
         `Perfil com ID ${profileId} não encontrado na sua conta.`,
       );
