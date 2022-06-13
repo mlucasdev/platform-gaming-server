@@ -19,6 +19,7 @@ async function bootstrap() {
     .setDescription('Aplicação para gestão jogos de uma plataforma.')
     .setVersion('1.0.0')
     .addTag('status')
+    .addTag('auth')
     .addTag('user')
     .addTag('profile')
     .addTag('game')

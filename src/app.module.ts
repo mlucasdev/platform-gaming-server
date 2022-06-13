@@ -7,6 +7,7 @@ import { GendersModule } from './genres/genres.module';
 import { UsersModule } from './users/users.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { ProfileGameModule } from './profile-game/profile-game.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ProfileGameModule } from './profile-game/profile-game.module';
     UsersModule,
     ProfilesModule,
     ProfileGameModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
