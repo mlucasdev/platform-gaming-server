@@ -103,7 +103,7 @@ export class ProfileGameService {
     });
 
     const favoritesGames = allGamesProfile.games.filter(
-      (game) => game.favorite == true,
+      (game) => game.favorite === true,
     );
 
     return [{ favoritesGames }, { allGamesProfile }, { genres }];
