@@ -40,11 +40,20 @@ export class ProfilesService {
       .catch(handleError);
   }
 
-  async findAll() {
-    const profiles = await this.prisma.profiles.findMany({
-      select: this.profileSelect,
+  async findAll(userId: string) {
+    const profiles = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        profile: {
+          select: {
+            id: true,
+            title: true,
+            imageURL: true,
+          },
+        },
+      },
     });
-    if (profiles.length == 0) {
+    if (!profiles) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
     return profiles;
