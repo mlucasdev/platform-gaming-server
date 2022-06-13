@@ -39,31 +39,31 @@ export class ProfilesController {
     return this.profilesService.findAll(user.id);
   }
 
-  @Get(':id')
+  @Get(':profileId')
   @ApiOperation({
     summary: 'Buscar um Perfil pelo ID.',
   })
-  findOne(@Param('id') id: string) {
-    return this.profilesService.findOne(id);
+  findOne(@Param('profileId') profileId: string, @LoggedUser() user: User) {
+    return this.profilesService.findOne(profileId, user.id);
   }
 
-  @Patch(':profileId')
-  @ApiOperation({
-    summary: 'Editar um Perfil pelo ID.',
-  })
-  update(
-    @Param('profileId') profileId: string,
-    @LoggedUser() user: User,
-    @Body() dto: UpdateProfileDto,
-  ) {
-    return this.profilesService.update(profileId, user.id, dto);
-  }
+  // @Patch(':profileId')
+  // @ApiOperation({
+  //   summary: 'Editar um Perfil pelo ID.',
+  // })
+  // update(
+  //   @Param('profileId') profileId: string,
+  //   @LoggedUser() user: User,
+  //   @Body() dto: UpdateProfileDto,
+  // ) {
+  //   return this.profilesService.update(profileId, user.id, dto);
+  // }
 
-  @Delete(':id')
-  @ApiOperation({
-    summary: 'Deletar um Perfil pelo ID.',
-  })
-  delete(@Param('id') id: string): Promise<void> {
-    return this.profilesService.delete(id);
-  }
+  // @Delete(':id')
+  // @ApiOperation({
+  //   summary: 'Deletar um Perfil pelo ID.',
+  // })
+  // delete(@Param('id') id: string): Promise<void> {
+  //   return this.profilesService.delete(id);
+  // }
 }

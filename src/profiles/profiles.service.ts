@@ -1,4 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
@@ -59,39 +64,60 @@ export class ProfilesService {
     return profiles;
   }
 
-  findOne(id: string) {
-    return this.findById(id);
+  findOne(profileId: string, userId: string) {
+    return this.findById(profileId, userId);
   }
 
-  async update(profileId: string, userId: string, dto: UpdateProfileDto) {
-    await this.findById(profileId);
-    const data: Partial<Prisma.ProfilesCreateInput> = {
-      title: dto.title,
-      imageURL: dto.imageURL,
-      user: {
-        connect: {
-          id: userId,
+  // async update(profileId: string, userId: string, dto: UpdateProfileDto) {
+  //   await this.findById(profileId);
+  //   const data: Partial<Prisma.ProfilesCreateInput> = {
+  //     title: dto.title,
+  //     imageURL: dto.imageURL,
+  //     user: {
+  //       connect: {
+  //         id: userId,
+  //       },
+  //     },
+  //   };
+  //   return this.prisma.profiles
+  //     .update({
+  //       where: { id: profileId },
+  //       data,
+  //       select: this.profileSelect,
+  //     })
+  //     .catch(handleError);
+  // }
+
+  // async delete(id: string) {
+  //   await this.findById(id);
+  //   await this.prisma.profiles.delete({ where: { id } });
+  //   throw new HttpException('', 204);
+  // }
+
+  async findById(profileId: string, userId: string) {
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        profile: {
+          select: {
+            id: true,
+          },
         },
       },
-    };
-    return this.prisma.profiles
-      .update({
-        where: { id: profileId },
-        data,
-        select: this.profileSelect,
-      })
-      .catch(handleError);
-  }
+    });
 
-  async delete(id: string) {
-    await this.findById(id);
-    await this.prisma.profiles.delete({ where: { id } });
-    throw new HttpException('', 204);
-  }
+    const profileID = user.profile.filter(
+      (element) => element.id === profileId,
+    );
 
-  async findById(id: string) {
+    if (profileID.length === 0) {
+      throw new UnauthorizedException(
+        `Perfil com ID ${profileId} não encontrado na sua conta.`,
+      );
+    }
+
     const record = await this.prisma.profiles.findUnique({
-      where: { id },
+      where: { id: profileId },
       select: {
         id: true,
         title: true,
@@ -128,10 +154,6 @@ export class ProfilesService {
         },
       },
     });
-
-    if (!record) {
-      throw new NotFoundException(`Perfil com ID ${record} não encontrado`);
-    }
 
     return record;
   }
