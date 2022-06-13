@@ -19,8 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
 
     if (!user) {
-      console.log('Token inválido');
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Token inválido ou não informado');
     }
 
     delete user.password;
