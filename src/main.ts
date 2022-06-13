@@ -21,9 +21,9 @@ async function bootstrap() {
     .addTag('status')
     .addTag('auth')
     .addTag('user')
-    .addTag('profile')
     .addTag('game')
     .addTag('genre')
+    .addTag('profile')
     .addTag('profile-game')
     .addBearerAuth()
     .build();
