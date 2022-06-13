@@ -4,7 +4,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class ProfilesService {
@@ -22,18 +21,18 @@ export class ProfilesService {
     },
   };
 
-  create(dto: CreateProfileDto) {
+  async create(userId: string, dto: CreateProfileDto) {
     const data: Prisma.ProfilesCreateInput = {
       title: dto.title,
       imageURL: dto.imageURL,
       user: {
         connect: {
-          id: dto.userId,
+          id: userId,
         },
       },
     };
 
-    return this.prisma.profiles
+    return await this.prisma.profiles
       .create({
         data,
         select: this.profileSelect,
@@ -55,20 +54,20 @@ export class ProfilesService {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateProfileDto) {
-    await this.findById(id);
+  async update(profileId: string, userId: string, dto: UpdateProfileDto) {
+    await this.findById(profileId);
     const data: Partial<Prisma.ProfilesCreateInput> = {
       title: dto.title,
       imageURL: dto.imageURL,
       user: {
         connect: {
-          id: dto.userId,
+          id: userId,
         },
       },
     };
     return this.prisma.profiles
       .update({
-        where: { id },
+        where: { id: profileId },
         data,
         select: this.profileSelect,
       })

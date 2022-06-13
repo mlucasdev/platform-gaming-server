@@ -1,8 +1,17 @@
 import {
-  Body, Controller, Delete, Get, Param, Patch, Post, UseGuards
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ProfilesService } from './profiles.service';
@@ -10,7 +19,7 @@ import { ProfilesService } from './profiles.service';
 @ApiTags('profile')
 @UseGuards(AuthGuard())
 @ApiBearerAuth()
-@Controller('profiles')
+@Controller('profile')
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
@@ -18,8 +27,8 @@ export class ProfilesController {
   @ApiOperation({
     summary: 'Criar um novo Perfil.',
   })
-  create(@Body() dto: CreateProfileDto) {
-    return this.profilesService.create(dto);
+  create(@LoggedUser() user: User, @Body() dto: CreateProfileDto) {
+    return this.profilesService.create(user.id, dto);
   }
 
   @Get()
@@ -38,12 +47,16 @@ export class ProfilesController {
     return this.profilesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':profileId')
   @ApiOperation({
     summary: 'Editar um Perfil pelo ID.',
   })
-  update(@Param('id') id: string, @Body() dto: UpdateProfileDto) {
-    return this.profilesService.update(id, dto);
+  update(
+    @Param('profileId') profileId: string,
+    @LoggedUser() user: User,
+    @Body() dto: UpdateProfileDto,
+  ) {
+    return this.profilesService.update(profileId, user.id, dto);
   }
 
   @Delete(':id')
