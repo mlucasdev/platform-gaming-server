@@ -44,7 +44,7 @@ export class GenreService {
 
   async update(id: string, dto: UpdateGenreDto): Promise<Genre> {
     await this.findById(id);
-    const data: Partial<Genre> = { ...dto };
+    const data: UpdateGenreDto = { ...dto };
     return this.prisma.genres
       .update({ where: { id }, data })
       .catch(handleError);
