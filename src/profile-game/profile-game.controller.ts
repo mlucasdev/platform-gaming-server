@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { LoggedUser } from 'src/auth/logged-user.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { CreateProfileGameDto } from './dto/create-profile-game.dto';
 import { ProfileGameService } from './profile-game.service';
 
@@ -19,11 +21,11 @@ export class ProfileGameController {
     return this.profileGameService.create(dto);
   }
 
-  @Get('homepage/:id')
+  @Get('homepage/:profileId')
   @ApiOperation({
     summary: 'Buscar todos os jogos favoritos do Perfil pelo ID',
   })
-  homePage(@Param('id') id: string) {
-    return this.profileGameService.homePage(id);
+  homePage(@Param('profileId') profileId: string, @LoggedUser() user: User) {
+    return this.profileGameService.homePage(profileId, user.id);
   }
 }
