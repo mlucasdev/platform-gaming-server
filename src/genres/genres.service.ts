@@ -1,4 +1,5 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
 import { CreateGenreDto } from './dto/create-genre.dto';
@@ -9,9 +10,31 @@ import { Genre } from './entities/genre.entity';
 export class GenreService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateGenreDto): Promise<Genre> {
-    const data: Genre = { ...dto };
-    return this.prisma.genres.create({ data }).catch(handleError);
+  create(dto: CreateGenreDto) {
+    const data: Prisma.GenresCreateInput = {
+      ...dto,
+      games: {
+        createMany: {
+          data: dto.games.map((genreId) => ({ gameId: genreId })),
+        },
+      },
+    };
+    return this.prisma.genres
+      .create({
+        data,
+        include: {
+          games: {
+            select: {
+              game: {
+                select: {
+                  title: true,
+                },
+              },
+            },
+          },
+        },
+      })
+      .catch(handleError);
   }
 
   async findAll() {
@@ -42,11 +65,27 @@ export class GenreService {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateGenreDto): Promise<Genre> {
+  async update(id: string, dto: UpdateGenreDto) {
     await this.findById(id);
-    const data: UpdateGenreDto = { ...dto };
+    const data: Partial<Genre> = {
+      ...dto,
+    };
     return this.prisma.genres
-      .update({ where: { id }, data })
+      .update({
+        where: { id },
+        data,
+        include: {
+          games: {
+            select: {
+              game: {
+                select: {
+                  title: true,
+                },
+              },
+            },
+          },
+        },
+      })
       .catch(handleError);
   }
 

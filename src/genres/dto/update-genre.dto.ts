@@ -1,22 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class UpdateGenreDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    description: 'Nome do Perfil.',
-    example: 'Barack Obama',
+    description: 'Nome do Gênero.',
+    example: 'FPS',
   })
-  title?: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @IsUrl()
-  @ApiProperty({
-    description: 'Url da imagem do perfil.',
-    example: 'https://imagemdoperfil.jpg',
-  })
-  imageURL?: string;
+  name?: string;
 }
-
