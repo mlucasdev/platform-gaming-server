@@ -1,10 +1,14 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class ProfilesService {
@@ -22,18 +26,18 @@ export class ProfilesService {
     },
   };
 
-  create(dto: CreateProfileDto) {
+  async create(userId: string, dto: CreateProfileDto) {
     const data: Prisma.ProfilesCreateInput = {
       title: dto.title,
       imageURL: dto.imageURL,
       user: {
         connect: {
-          id: dto.userId,
+          id: userId,
         },
       },
     };
 
-    return this.prisma.profiles
+    return await this.prisma.profiles
       .create({
         data,
         select: this.profileSelect,
@@ -41,49 +45,75 @@ export class ProfilesService {
       .catch(handleError);
   }
 
-  async findAll() {
-    const profiles = await this.prisma.profiles.findMany({
-      select: this.profileSelect,
+  async findAll(userId: string) {
+    const profiles = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        profile: {
+          select: {
+            id: true,
+            title: true,
+            imageURL: true,
+          },
+        },
+      },
     });
-    if (profiles.length == 0) {
+    if (!profiles) {
       throw new NotFoundException(`Nada foi encontrado.`);
     }
     return profiles;
   }
 
-  findOne(id: string) {
-    return this.findById(id);
+  findOne(profileId: string, userId: string) {
+    return this.findById(profileId, userId);
   }
 
-  async update(id: string, dto: UpdateProfileDto) {
-    await this.findById(id);
+  async update(profileId: string, userId: string, dto: UpdateProfileDto) {
+    await this.findById(profileId, userId);
     const data: Partial<Prisma.ProfilesCreateInput> = {
       title: dto.title,
       imageURL: dto.imageURL,
       user: {
         connect: {
-          id: dto.userId,
+          id: userId,
         },
       },
     };
     return this.prisma.profiles
       .update({
-        where: { id },
+        where: { id: profileId },
         data,
         select: this.profileSelect,
       })
       .catch(handleError);
   }
 
-  async delete(id: string) {
-    await this.findById(id);
+  async delete(id: string, userId: string) {
+    await this.findById(id, userId);
     await this.prisma.profiles.delete({ where: { id } });
     throw new HttpException('', 204);
   }
 
-  async findById(id: string) {
+  async findById(profileId: string, userId: string) {
+    const profileUser = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        profile: {
+          where: {
+            id: profileId,
+          },
+        },
+      },
+    });
+
+    if (profileUser.profile.length === 0) {
+      throw new UnauthorizedException(
+        `Perfil com ID ${profileId} não encontrado na sua conta.`,
+      );
+    }
+
     const record = await this.prisma.profiles.findUnique({
-      where: { id },
+      where: { id: profileId },
       select: {
         id: true,
         title: true,
@@ -120,10 +150,6 @@ export class ProfilesService {
         },
       },
     });
-
-    if (!record) {
-      throw new NotFoundException(`Perfil com ID ${record} não encontrado`);
-    }
 
     return record;
   }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
@@ -55,9 +59,10 @@ export class ProfileGameService {
       .catch(handleError);
   }
 
-  async homePage(id: string) {
+  async homePage(profileId: string, userId: string) {
+    await this.findById(profileId, userId);
     const allGamesProfile = await this.prisma.profiles.findUnique({
-      where: { id },
+      where: { id: profileId },
       select: {
         games: {
           select: {
@@ -98,9 +103,41 @@ export class ProfileGameService {
     });
 
     const favoritesGames = allGamesProfile.games.filter(
-      (game) => game.favorite == true,
+      (game) => game.favorite === true,
     );
 
     return [{ favoritesGames }, { allGamesProfile }, { genres }];
+  }
+
+  async myAccount(userId) {
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(
+        `Usuário com ID ${userId} não encontrado.`,
+      );
+    }
+    return user;
+  }
+
+  async findById(profileId: string, userId: string) {
+    const profileUser = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: {
+        profile: {
+          where: {
+            id: profileId,
+          },
+        },
+      },
+    });
+
+    if (profileUser.profile.length === 0) {
+      throw new UnauthorizedException(
+        `Perfil com ID ${profileId} não encontrado na sua conta.`,
+      );
+    }
   }
 }

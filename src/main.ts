@@ -19,11 +19,13 @@ async function bootstrap() {
     .setDescription('Aplicação para gestão jogos de uma plataforma.')
     .setVersion('1.0.0')
     .addTag('status')
+    .addTag('auth')
     .addTag('user')
-    .addTag('profile')
     .addTag('game')
     .addTag('genre')
+    .addTag('profile')
     .addTag('profile-game')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

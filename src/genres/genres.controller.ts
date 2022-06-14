@@ -1,28 +1,34 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
-import { GenreService } from './genres.service';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserIsAdmin } from 'src/auth/user-is-admin.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Genre } from './entities/genre.entity';
+import { GenreService } from './genres.service';
 
 @ApiTags('genre')
+@UseGuards(AuthGuard())
+@ApiBearerAuth()
 @Controller('genres')
 export class GendersController {
   constructor(private readonly genreService: GenreService) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Criar um novo Gênero.',
+    summary: 'Criar um novo Gênero. (admin)',
   })
-  create(@Body() dto: CreateGenreDto): Promise<Genre> {
+  create(@UserIsAdmin() user: User, @Body() dto: CreateGenreDto) {
     return this.genreService.create(dto);
   }
 
@@ -44,20 +50,21 @@ export class GendersController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Editar um Gênero pelo ID.',
+    summary: 'Editar um Gênero pelo ID. (admin)',
   })
   update(
+    @UserIsAdmin() user: User,
     @Param('id') id: string,
     @Body() dto: UpdateGenreDto,
-  ): Promise<Genre> {
+  ) {
     return this.genreService.update(id, dto);
   }
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Deletar um Gênero pelo ID.',
+    summary: 'Deletar um Gênero pelo ID. (admin)',
   })
-  delete(@Param('id') id: string) {
+  delete(@UserIsAdmin() user: User, @Param('id') id: string) {
     return this.genreService.delete(id);
   }
 }
