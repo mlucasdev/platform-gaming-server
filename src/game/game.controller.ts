@@ -25,7 +25,7 @@ export class GameController {
 
   @Post()
   @ApiOperation({
-    summary: 'Criar um novo jogo.',
+    summary: 'Criar um novo jogo. (admin)',
   })
   create(@UserIsAdmin() user: User, @Body() dto: CreateGameDto) {
     return this.gameService.create(dto);
@@ -49,7 +49,7 @@ export class GameController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Editar um jogo pelo ID.',
+    summary: 'Editar um jogo pelo ID. (admin)',
   })
   update(
     @UserIsAdmin() user: User,
@@ -61,7 +61,7 @@ export class GameController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Deletar um jogo pelo ID.',
+    summary: 'Deletar um jogo pelo ID. (admin)',
   })
   delete(@UserIsAdmin() user: User, @Param('id') id: string): Promise<void> {
     return this.gameService.delete(id);

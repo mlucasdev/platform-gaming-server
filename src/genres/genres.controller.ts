@@ -26,7 +26,7 @@ export class GendersController {
 
   @Post()
   @ApiOperation({
-    summary: 'Criar um novo Gênero.',
+    summary: 'Criar um novo Gênero. (admin)',
   })
   create(@UserIsAdmin() user: User, @Body() dto: CreateGenreDto) {
     return this.genreService.create(dto);
@@ -50,7 +50,7 @@ export class GendersController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Editar um Gênero pelo ID.',
+    summary: 'Editar um Gênero pelo ID. (admin)',
   })
   update(
     @UserIsAdmin() user: User,
@@ -62,7 +62,7 @@ export class GendersController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Deletar um Gênero pelo ID.',
+    summary: 'Deletar um Gênero pelo ID. (admin)',
   })
   delete(@UserIsAdmin() user: User, @Param('id') id: string) {
     return this.genreService.delete(id);
