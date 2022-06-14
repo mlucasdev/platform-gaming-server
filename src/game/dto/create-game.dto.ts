@@ -79,7 +79,7 @@ export class CreateGameDto {
   @ApiProperty({
     description: 'Lista com os IDs dos gêneros do jogo.',
     example:
-      '["4306080b-e8be-46de-a591-192dce96ff10", "c4446e0a-93a8-4af2-8c63-606833e367a7"]',
+      '["76b73966-928c-407e-8c35-ba327f4d200c", "0eee08d7-8a4b-4751-bdfe-1f0bd61a6987"]',
   })
   genres: string[];
 }
