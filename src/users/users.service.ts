@@ -4,12 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -46,7 +46,6 @@ export class UsersService {
     cpf: true,
     isAdmin: false,
   };
-  
 
   confirmPassword(password, confirmPassword) {
     if (password !== confirmPassword) {
@@ -96,13 +95,13 @@ export class UsersService {
     return this.findById(id);
   }
 
-  async update(id: string, dto: UpdateUserDto) {
+  async update(userId: string, dto: UpdateUserDto) {
     if (dto.password) {
       this.confirmPassword(dto.password, dto.confirmPassword);
     }
     delete dto.confirmPassword;
 
-    await this.findById(id);
+    await this.findById(userId);
     const data: Partial<User> = { ...dto };
 
     if (data.password) {
@@ -110,7 +109,7 @@ export class UsersService {
     }
     return this.prisma.users
       .update({
-        where: { id },
+        where: { id: userId },
         data,
         select: {
           id: true,
