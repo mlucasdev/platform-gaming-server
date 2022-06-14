@@ -27,7 +27,7 @@ export class GameController {
   @ApiOperation({
     summary: 'Criar um novo jogo.',
   })
-  create(@UserIsAdmin() @Body() dto: CreateGameDto) {
+  create(@UserIsAdmin() user: User, @Body() dto: CreateGameDto) {
     return this.gameService.create(dto);
   }
 
@@ -35,7 +35,7 @@ export class GameController {
   @ApiOperation({
     summary: 'Buscar todos os jogos.',
   })
-  findAll(@UserIsAdmin() user: User) {
+  findAll() {
     return this.gameService.findAll();
   }
 
@@ -43,7 +43,7 @@ export class GameController {
   @ApiOperation({
     summary: 'Buscar um jogo pelo ID.',
   })
-  findOne(@UserIsAdmin() user: User, @Param('id') id: string) {
+  findOne(@Param('id') id: string) {
     return this.gameService.findOne(id);
   }
 
@@ -63,7 +63,7 @@ export class GameController {
   @ApiOperation({
     summary: 'Deletar um jogo pelo ID.',
   })
-  delete(@UserIsAdmin() @Param('id') id: string): Promise<void> {
+  delete(@UserIsAdmin() user: User, @Param('id') id: string): Promise<void> {
     return this.gameService.delete(id);
   }
 }
