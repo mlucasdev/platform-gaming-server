@@ -14,7 +14,7 @@ export class CreateUserDto {
   @IsString()
   @ApiProperty({
     description: 'Nome do Usuário.',
-    example: 'Neymar Junior',
+    example: 'Cristiano Ronaldo',
   })
   name: string;
 
@@ -23,7 +23,7 @@ export class CreateUserDto {
   @Length(5, 50)
   @ApiProperty({
     description: 'Email do usuário.',
-    example: 'neymarjunior@gmail.com',
+    example: 'cristianoronaldo@gmail.com',
   })
   email: string;
 
@@ -49,10 +49,9 @@ export class CreateUserDto {
   @Length(11, 11)
   @ApiProperty({
     description: 'CPF do usuário.',
-    example: '12312312399',
+    example: '99312312399',
   })
   cpf: string;
 
-  @IsBoolean()
   isAdmin: boolean;
 }
