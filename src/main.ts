@@ -16,7 +16,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Platform Games')
-    .setDescription('Aplicação para gestão jogos de uma plataforma.')
+    .setDescription('Aplicação para gestão de jogos, gêneros e usuários de uma plataforma.')
     .setVersion('1.0.0')
     .addTag('status')
     .addTag('auth')
