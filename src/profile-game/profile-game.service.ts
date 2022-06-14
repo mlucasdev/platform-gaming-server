@@ -109,6 +109,19 @@ export class ProfileGameService {
     return [{ favoritesGames }, { allGamesProfile }, { genres }];
   }
 
+  async myAccount(userId) {
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(
+        `Usuário com ID ${userId} não encontrado.`,
+      );
+    }
+    return user;
+  }
+
   async findById(profileId: string, userId: string) {
     const profileUser = await this.prisma.users.findUnique({
       where: { id: userId },

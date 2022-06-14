@@ -28,4 +28,14 @@ export class ProfileGameController {
   homePage(@Param('profileId') profileId: string, @LoggedUser() user: User) {
     return this.profileGameService.homePage(profileId, user.id);
   }
+
+  @Get('/my-account')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Buscar dados do usuário logado nomomento.',
+  })
+  myAccount(@LoggedUser() user: User) {
+    return this.profileGameService.myAccount(user.id);
+  }
 }
